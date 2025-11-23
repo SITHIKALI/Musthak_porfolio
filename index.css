@@ -1,0 +1,150 @@
+/* Global custom styles (star background + small tweaks) */
+
+/* Full-screen star background layer */
+.star-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0; /* sit behind content but above base background */
+  pointer-events: none;
+  background: linear-gradient(to bottom, #0f172a 0%, #0b1220 50%, #000000 100%);
+  overflow: hidden;
+}
+
+.star-bg .star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 0 6px rgba(255,255,255,0.06);
+  opacity: 0.95;
+  transform: translateY(0) scale(1);
+}
+
+/* Animation - slow rise */
+@keyframes starRiseSlow {
+  0% { transform: translateY(0) scale(1); opacity: 0.95; }
+  100% { transform: translateY(-120vh) scale(1.15); opacity: 0; }
+}
+@keyframes starRiseMed {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-140vh) scale(1.05); opacity: 0; }
+}
+@keyframes starRiseFast {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-180vh) scale(1.02); opacity: 0; }
+}
+
+/* Assign different speeds and delays for depth */
+.star-bg .star:nth-child(3n+1) { animation: starRiseSlow 40s linear infinite; }
+.star-bg .star:nth-child(3n+2) { animation: starRiseMed 30s linear infinite; }
+.star-bg .star:nth-child(3n) { animation: starRiseFast 50s linear infinite; }
+
+/* Slight fade near edges using radial-gradients overlay */
+.star-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(ellipse at center, rgba(255,255,255,0) 0%, rgba(0,0,0,0.35) 70%, rgba(0,0,0,0.65) 100%);
+  mix-blend-mode: overlay;
+  opacity: 0.18;
+}
+
+/* Denser effect used on Home page */
+.star-bg.home-dense .star {
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(255,255,255,0.12);
+}
+.star-bg.home-dense::after { opacity: 0.10; }
+
+/* Mobile: reduce animations/disable for performance */
+@media (max-width: 640px) {
+  .star-bg { display: none; }
+}
+
+/* Footer: semi-transparent with blur to blend with background */
+footer {
+  background-color: rgba(0,0,0,0.55) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* Ensure app content renders above the star background */
+#root { position: relative; z-index: 10; }
+
+/* Header already uses backdrop-blur-md; ensure high contrast for nav links */
+nav [class*='text-'] { color: #e6eef8; }
+
+/* Accessibility: ensure text contrasts sharply over star background */
+.text-on-stars { color: #f8fafc; }
+
+/* Holographic nav card styles */
+.holo-card {
+  position: relative;
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(6px) saturate(120%);
+  box-shadow: 0 6px 22px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  transform-style: preserve-3d;
+  perspective: 800px;
+  overflow: hidden;
+}
+.holo-card .holo-text { position: relative; z-index: 2; color: #e6eef8; font-weight: 600; }
+.holo-card .holo-sheen {
+  position: absolute;
+  left: -40%;
+  top: -20%;
+  width: 60%;
+  height: 160%;
+  transform: rotate(18deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0) 100%);
+  mix-blend-mode: screen;
+  opacity: 0.0;
+  z-index: 1;
+  pointer-events: none;
+}
+.holo-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 40px rgba(2,6,23,0.6); }
+.holo-card:active { transform: translateY(-2px) scale(1.01); }
+
+/* smaller tap target on mobile to avoid jumping */
+@media (max-width: 640px) {
+  .holo-card { padding: 6px 10px; }
+}
+
+/* Resume button micro-interaction styling */
+.resume-btn {
+  box-shadow: 0 8px 24px rgba(2,6,23,0.45);
+  transition: box-shadow 0.28s ease, transform 0.28s ease;
+}
+.resume-btn:hover {
+  box-shadow: 0 18px 60px rgba(168,85,247,0.14);
+  transform: translateY(-3px);
+}
+
+/* Glassmorphism glowing project card */
+.glow-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 30px rgba(2,6,23,0.6), 0 0 30px rgba(168,85,247,0.03) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glow-card:hover {
+  box-shadow: 0 18px 60px rgba(2,6,23,0.6), 0 0 60px rgba(168,85,247,0.08) inset;
+}
+.glow-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(168,85,247,0.06), rgba(6,182,212,0.06));
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  z-index: 0;
+}
+.glow-card img { z-index: 5; }
+.glow-card > * { position: relative; z-index: 10; }
